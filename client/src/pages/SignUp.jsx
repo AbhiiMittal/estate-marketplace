@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ export default function SignUp() {
         >
           SignUp
         </button>
+        <OAuth />
       </form>
       <div className="flex">
         <p>Have an account?</p>
