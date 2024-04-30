@@ -1,8 +1,7 @@
-const test =  (req, res) => {
-    res.json({message : "Hello from user routes"});
-}
-
+const bcrypt = require('bcryptjs');
+const User = require('../models/UserModel');
 const updateUser = async (req,res,next) => {
+    // console.log("hello");
     if(req.user.id!==req.params.id){
         return next(errorHandler("Unauthorized",401));
     }
@@ -16,12 +15,13 @@ const updateUser = async (req,res,next) => {
                 email : req.body.email,
                 password : req.body.password,
                 avatar : req.body.avatar
-            }
+             }
         },{new : true});
 
         res.json({
             success : true,
-            message : "User updated "
+            message : "User updated",
+            userData : updatedUser
         })
 
     } catch (error) {

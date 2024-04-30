@@ -46,6 +46,7 @@ const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validCred._id }, process.env.KEY, {
       expiresIn: "1h",
     });
+    console.log(token);
     res
       .cookie("token", token, {
         httpOnly: true,
