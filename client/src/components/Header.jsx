@@ -1,10 +1,12 @@
 // import React from 'react'
 import { FaSearch } from "react-icons/fa";
+// import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 export default function Header() {
   const {currentUser} = useSelector((state) => state.user)
   // console.log(currentUser.avatar);
+  // const fileRef = useRef(null);
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">

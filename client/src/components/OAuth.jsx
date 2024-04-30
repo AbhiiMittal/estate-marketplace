@@ -13,6 +13,7 @@ export default function OAuth() {
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, provider);
+      console.log()
       const res = await fetch('http://localhost:3000/auth/google', {
         method: 'POST',
         headers: {
@@ -29,7 +30,7 @@ export default function OAuth() {
       dispatch(signInSuccess(data));
       navigate('/')
     } catch (error) {
-      console.log('could not sign in with google', error);
+      console.log('could not sign in with google', error.message);
     }
   };
   return (

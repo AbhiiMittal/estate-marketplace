@@ -11,14 +11,14 @@ const signup = async (req, res, next) => {
       next(errorHandler("User already exists", 404));
       return;
     }
-    if (await userModel.findOne({ name: username })) {
+    if (await userModel.findOne({ username: username })) {
       next(errorHandler("Username already exists", 404));
       return;
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = new userModel({
-      name: username,
+      username: username,
       email: email,
       password: hashedPassword,
     });
@@ -51,7 +51,7 @@ const signin = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json({ message: "User logged in successfully" });
+      .json(validCred);
   } catch (err) {
     next(errorHandler(err.message, 550));
   }
@@ -61,12 +61,13 @@ const google = async (req, res,next) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
     // console.log(user);
+    // console.log(req.body.name);
     if (!user) {
       const generatePassword = Math.random().toString(36).slice(-8);
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(generatePassword, salt);
       const newUser = new userModel({
-        name:
+        username:
           req.body.name.split(" ").join("") + Math.floor(Math.random() * 1000),
         email: req.body.email,
         password: hashedPassword,
@@ -82,6 +83,7 @@ const google = async (req, res,next) => {
           sameSite: 'None'
         })
         .status(200).json(newUser)
+        return;
     }
     const token = jwt.sign({ id: user._id }, process.env.KEY, {
       expiresIn: "1h",
