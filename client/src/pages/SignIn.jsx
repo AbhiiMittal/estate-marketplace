@@ -32,12 +32,16 @@ export default function SignIn() {
       });
       const data = await res.json();
       console.log(data);
+      localStorage.setItem("token",data.token);
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         return;
       }
-      dispatch(signInSuccess(data));
+      const {success,...rest} = data;
+      console.log(rest);
+      dispatch(signInSuccess(rest));
       navigate('/');
+      console.log("Everything working fine!! in sign-in");
     } catch (error) {
       dispatch(signInFailure(error.message));
     }

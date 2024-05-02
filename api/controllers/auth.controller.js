@@ -34,7 +34,7 @@ const signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const validCred = await userModel.findOne({ email: email });
-    // console.log(validCred)
+    console.log(validCred)
     if (validCred === null) {
       next(errorHandler("Invalid email", 404));
     }
@@ -43,16 +43,9 @@ const signin = async (req, res, next) => {
       next(errorHandler("Invalid password", 404));
       return;
     }
-    const token = jwt.sign({ id: validCred._id }, process.env.KEY, {
-      expiresIn: "1h",
-    });
-    console.log(token);
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-      })
-      .status(200)
-      .json(validCred);
+    const token = jwt.sign({ id: validCred._id }, process.env.KEY);
+    // console.log(token);
+    res.json({validCred,token,success : true});
   } catch (err) {
     next(errorHandler(err.message, 550));
   }
@@ -78,23 +71,12 @@ const google = async (req, res,next) => {
       const token = jwt.sign({ id: newUser._id }, process.env.KEY, {
         expiresIn: "1h",
       });
-      res
-        .cookie("token", token, {
-          httpOnly: true,
-          sameSite: 'None'
-        })
-        .status(200).json(newUser)
-        return;
+      res.status(200).json(newUser);
     }
     const token = jwt.sign({ id: user._id }, process.env.KEY, {
       expiresIn: "1h",
     });
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        sameSite: 'None'
-      })
-      .status(200).json(user);
+    res.status(200).json(user);
   } catch (error) {
     console.log(error.message);
     next(error);
