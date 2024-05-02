@@ -37,9 +37,9 @@ export default function SignIn() {
         dispatch(signInFailure(data.message));
         return;
       }
-      const {success,...rest} = data;
+      const {success,token,...rest} = data;
       console.log(rest);
-      dispatch(signInSuccess(rest));
+      dispatch(signInSuccess({user : rest,token : token}));
       navigate('/');
       console.log("Everything working fine!! in sign-in");
     } catch (error) {

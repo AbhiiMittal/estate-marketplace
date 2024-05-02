@@ -10,18 +10,19 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { app } from "../firebase";
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser,loading,error,token } = useSelector((state) => state.user);
   // console.log(currentUser)
-  const currentUserCred = currentUser.validCred;
+  const currentUserCred = currentUser.userData;
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
   // console.log(filePerc);
   // console.log(currentUser);
-  console.log(formData);
+  // console.log(formData);
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -75,10 +76,10 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      await fetch(`http://localhost:3000/users/update/${currentUserCred._id}`, {
+      const res = await fetch(`http://localhost:3000/users/update/${currentUserCred._id}`, {
         method: "POST",
         headers:{
-          "Authorization":`Bearer ${currentUser.token}`,
+          "Authorization":`Bearer ${token}`,
           "Content-Type": "application/json",
       },
         body: JSON.stringify(formData),
@@ -89,6 +90,7 @@ export default function Profile() {
       return;
     }
     dispatch(updateUserSuccess(data));
+    setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
@@ -151,13 +153,17 @@ export default function Profile() {
           className="bg-slate-700 text-white rounded-lg p-3 uppercase
         hover:opacity-95 disabled:opacity-80"
         >
-          update
+          {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
+      <p className='text-red-700 mt-5'>{error ? error : ''}</p>
+      <p className='text-green-700 mt-5'>
+        {updateSuccess ? 'User is updated successfully!' : ''}
+      </p>
     </div>
   );
 }
