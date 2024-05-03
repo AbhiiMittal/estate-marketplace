@@ -67,20 +67,30 @@ const google = async (req, res,next) => {
         avatar: req.body.photo,
       });
       await newUser.save();
-      const userData  = newUser;
+      newUser;
       const token = jwt.sign({ id: newUser._id }, process.env.KEY, {
         expiresIn: "1h",
       });
-      res.json({userData,token,success : true});
+      res.json({userData : newUser,token,success : true});
     }
     const token = jwt.sign({ id: user._id }, process.env.KEY, {
       expiresIn: "1h",
     });
-    res.json({userData,token,success : true});
+    res.json({userData : user,token,success : true});
   } catch (error) {
     console.log(error.message);
     next(error);
   }
 };
 
-module.exports = { signup, signin, google };
+
+const signOut = async (req, res, next) => {
+  try {
+    res.status(200).json('User has been logged out!');
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { signup, signin, google, signOut };

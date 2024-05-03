@@ -13,7 +13,7 @@ export default function OAuth() {
       const auth = getAuth(app);
 
       const result = await signInWithPopup(auth, provider);
-      console.log()
+      // console.log()
       const res = await fetch('http://localhost:3000/auth/google', {
         method: 'POST',
         headers: {
@@ -26,8 +26,9 @@ export default function OAuth() {
         }),
       })
       const data = await res.json();
-      console.log(data);
-      dispatch(signInSuccess(data));
+      const { success,token ,...rest} = data;
+      localStorage.setItem("token",data.token);
+      dispatch(signInSuccess({user : rest,token : token}));
       navigate('/')
     } catch (error) {
       console.log('could not sign in with google', error.message);
