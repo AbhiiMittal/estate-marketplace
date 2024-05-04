@@ -7,6 +7,7 @@ function verifyToken(req,res,next){
         let token = req.headers.authorization.split(" ")[1];
         jwt.verify(token,process.env.KEY,(err,data)=>{
             if(err){
+                console.log(err);
                 console.log("Error forbidden");
                 next(errorHandler("Forbidden",500));
             }

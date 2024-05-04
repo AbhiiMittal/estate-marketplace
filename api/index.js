@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/auth.routes.js");
+const listingRoute = require("./routes/listing.route.js");
 const userRoutes = require("./routes/user.routes.js");
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use("/users",userRoutes);
 app.use("/auth",authRoutes);
+app.use("/listing",listingRoute);
 
 app.use((err,req,res,next)=>{
   const statusCode = err.statusCode || 500;
