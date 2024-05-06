@@ -16,6 +16,7 @@ function verifyToken(req,res,next){
                 next();
         })
     }else{
+        console.log("error in token");
         next(errorHandler("Unauthorised",401));
     }
 }

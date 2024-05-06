@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/UserModel');
+const listingModel = require('../models/listing.model.js');
 const {errorHandler} = require('../utils/error');
 const updateUser = async (req,res,next) => {
     // console.log(req.body.username);
@@ -72,4 +73,20 @@ const deleteUser = async(req,res,next)=>{
     }
 }
 
-module.exports = {updateUser , deleteUser};
+
+const getUserListings = async(req,res,next)=>{
+    if(req.params.id === req.user.id){
+        try {
+            const listings =await listingModel.find({userRef:req.params.id});
+            res.status(200).json(listings);
+        } catch (error) {
+            console.log("error" , error.message);
+            next(error);            
+        }
+    }else{
+        next(errorHandler("Unauthorized",401));
+    }
+}
+
+
+module.exports = {updateUser , deleteUser, getUserListings};
