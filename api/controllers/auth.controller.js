@@ -22,7 +22,6 @@ const signup = async (req, res, next) => {
       email: email,
       password: hashedPassword,
     });
-
     await user.save();
     res.json({ message: "User created successfully" });
   } catch (err) {

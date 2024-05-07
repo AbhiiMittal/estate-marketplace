@@ -18,7 +18,9 @@ export default function SignUp() {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if(data.success===false){
+            console.log("SIGN-up problem");
             setError(data.message)
           }else{
             navigate("/sign-in");
